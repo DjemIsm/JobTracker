@@ -3,25 +3,35 @@
     ViewData["Title"] = "Job Applications";
 }
 
-<table>
-    <thead>
-        <tr>
-            <th>Company</th>
-            <th>Position</th>
-            <th>Date Applied</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var application in Model)
-    {
-        <tr>
-            <td>@application.CompanyName</td>
-            <td>@application.JobTitle</td>
-            <td>@application.ApplicationDate.ToShortDateString()</td>
-            <td>@application.Status</td>
-            <td>@application.Notes</td>
-        </tr>
-    }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        You have not added any job applications yet. Click the button below to add your first application.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Date Applied</th>
+                <th>Status</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.CompanyName</td>
+                    <td>@application.JobTitle</td>
+                    <td>@application.ApplicationDate.ToShortDateString()</td>
+                    <td>@application.Status.ToString()</td>
+                    <td>@application.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
