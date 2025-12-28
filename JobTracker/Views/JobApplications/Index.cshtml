@@ -1,0 +1,27 @@
+﻿@model IEnumerable<JobApplication>
+@{
+    ViewData["Title"] = "Job Applications";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Date Applied</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var application in Model)
+    {
+        <tr>
+            <td>@application.CompanyName</td>
+            <td>@application.JobTitle</td>
+            <td>@application.ApplicationDate.ToShortDateString()</td>
+            <td>@application.Status</td>
+            <td>@application.Notes</td>
+        </tr>
+    }
+    </tbody>
+</table>
