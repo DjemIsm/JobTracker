@@ -22,6 +22,7 @@ else
                 <th>Date Applied</th>
                 <th>Status</th>
                 <th>Notes</th>
+                <th>Aktionen</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,10 @@ else
                     <td>@application.ApplicationDate.ToShortDateString()</td>
                     <td>@application.Status.ToString()</td>
                     <td>@application.Notes</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@application.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                        <a asp-action="Edit" asp-route-id="@application.Id" class="btn btn-sm btn-outline-primary ms-2">Edit</a>
+                    </td>
                 </tr>
             }
         </tbody>

@@ -37,5 +37,51 @@ namespace JobTracker.Controllers
             }
             return View(jobApplication);
         }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var jobapplication = await _context.JobApplications.FindAsync(id);        
+            if (jobapplication == null)
+            {
+                return NotFound();
+            }
+            return View(jobapplication);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var jobApplication = await _context.JobApplications.FindAsync(id);
+            if (jobApplication == null)
+            {
+                return NotFound();
+            }
+            return View(jobApplication);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("Id,CompanyName,JobTitle,ApplicationDate,Status,Notes")] JobApplication jobApplication)
+        {
+            if (id != jobApplication.Id)
+            {
+                return NotFound();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(jobApplication);
+            }
+            _context.Update(jobApplication);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
