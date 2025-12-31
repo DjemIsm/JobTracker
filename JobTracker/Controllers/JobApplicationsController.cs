@@ -83,5 +83,28 @@ namespace JobTracker.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+            var jobApplication = await _context.JobApplications.FindAsync(id);
+
+            if (jobApplication == null)
+                return NotFound();
+            return View(jobApplication);
+        }
+
+        [HttpPost, ActionName("Delete") ]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var jobApplication = await _context.JobApplications.FindAsync(id);
+            if (jobApplication == null)
+                return NotFound();
+            _context.JobApplications.Remove(jobApplication);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
