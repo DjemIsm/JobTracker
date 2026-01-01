@@ -1,7 +1,35 @@
 ﻿@model IEnumerable<JobApplication>
+
+
 @{
     ViewData["Title"] = "Job Applications";
+    var q = (string?)ViewBag.Q ?? "";
+    ApplicationStatus? selectedStatus = ViewBag.Status as ApplicationStatus?;
 }
+
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-5">
+        <label class="form-label" for="q">Search</label>
+        <input id="q" name="q" value="@q" class="form-control" placeholder="Company or job title..." />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label" for="status">Status</label>
+        <select id="status" name="status" class="form-select">
+            <option value="">All</option>
+            @foreach (var item in Html.GetEnumSelectList<ApplicationStatus>())
+            {
+                var isSelected = selectedStatus.HasValue && item.Value == ((int)selectedStatus.Value).ToString();
+                <option value="@item.Value" selected="@(isSelected ? "selected" : null)">@item.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
 
 @if (!Model.Any())
 {

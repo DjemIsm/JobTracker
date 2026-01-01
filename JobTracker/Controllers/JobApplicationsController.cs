@@ -14,9 +14,31 @@ namespace JobTracker.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, ApplicationStatus? status)
         {
-            var jobApplications = await _context.JobApplications.ToListAsync();
+            IQueryable<JobApplication> query = _context.JobApplications;
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var term = q.Trim();
+                query = query.Where(x =>
+                    x.CompanyName.Contains(term) ||
+                    x.JobTitle.Contains(term));
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status.Value);
+            }
+
+            var jobApplications = await query
+                .OrderByDescending(x => x.ApplicationDate)
+                .ToListAsync();
+
+            // Für "keep values" im View
+            ViewBag.Q = q;
+            ViewBag.Status = status;
+
             return View(jobApplications);
         }
 
@@ -106,5 +128,7 @@ namespace JobTracker.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        
     }
 }
