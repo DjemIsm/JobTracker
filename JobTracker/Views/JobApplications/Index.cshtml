@@ -7,6 +7,12 @@
     ApplicationStatus? selectedStatus = ViewBag.Status as ApplicationStatus?;
 }
 
+<div class="d-flex justify-content-end mb-3">
+    <a asp-action="Create" class="btn btn-success">
+        Add job application
+    </a>
+</div>
+
 <form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
     <div class="col-md-5">
         <label class="form-label" for="q">Search</label>
@@ -49,9 +55,6 @@
         <div class="alert alert-info" role="alert">
             You have not added any job applications yet. Click the button below to add your first application.
         </div>
-        <a asp-action="Create" class="btn btn-primary">
-            Add job application
-        </a>
     }
 }
 else
