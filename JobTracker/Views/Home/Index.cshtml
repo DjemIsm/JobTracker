@@ -1,8 +1,67 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DashboardViewModel
+
+@{
+        ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard</h2>
+    <div class="d-flex gap-2">
+        <a asp-controller="JobApplications" asp-action="Index" class="btn btn-primary">View All Applications</a>
+        <a asp-controller="JobApplications" asp-action="Create" class="btn btn-success">Add New Application</a>
+    </div>
 </div>
+
+<h3> Status Overview</h3>
+
+<div class="row g-3 mb-4">
+    @foreach (ApplicationStatus status in Enum.GetValues(typeof(ApplicationStatus)))
+    {
+        <div class="col-6 col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="text-muted">@status</div>
+                    <div class="fs-3 fw-bold">@Model.ApplicationStatusCounts[status]</div>
+                </div>
+            </div>
+        </div> 
+    }
+</div>
+
+<h3 class="mb-3"> Recent Applications</h3>
+
+@if (!Model.RecentApplications.Any())
+{
+    <div class="alert alert-info">No job applications yet</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Job title</th>
+                <th>Status</th>
+                <th>Date Applied</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model.RecentApplications)
+            {
+                <tr>
+                    <td>@application.CompanyName</td>
+                    <td>@application.JobTitle</td>
+                    <td>@application.Status</td>
+                    <td>@application.ApplicationDate.ToString("yyyy-MM-dd")</td>
+                    <td class="text-end">
+                        <a asp-controller="JobApplications" asp-action="Details" asp-route-id="@application.Id"
+                           class="btn btn-sm btn-outline-primary">
+                           Details
+                       </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
