@@ -11,7 +11,10 @@
     <a asp-action="Create" class="btn btn-success">
         Add job application
     </a>
-    <a asp-action="ExportCsv" class="btn btn-outline-secondary ms-2">
+    <a asp-action="ExportCsv" 
+        asp-route-q="@(string.IsNullOrWhiteSpace(q) ? null : q)"
+        asp-route-status="@(selectedStatus.HasValue ? ((int)selectedStatus.Value).ToString() : null)"
+        class="btn btn-outline-secondary ms-2">
         Export to CSV
     </a>
 </div>

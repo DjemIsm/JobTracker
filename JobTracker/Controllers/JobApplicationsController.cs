@@ -133,9 +133,24 @@ namespace JobTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExportCsv()
+        public async Task<IActionResult> ExportCsv(string? q, ApplicationStatus? status)
         {
-            var apps = await _context.JobApplications
+            IQueryable<JobApplication> query = _context.JobApplications;
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var term = q.Trim();
+                query = query.Where(x =>
+                    x.CompanyName.Contains(term) ||
+                    x.JobTitle.Contains(term));
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status.Value);
+            }
+
+            var apps = await query
                 .OrderByDescending(x => x.ApplicationDate)
                 .ThenByDescending(x => x.Id)
                 .ToListAsync();
