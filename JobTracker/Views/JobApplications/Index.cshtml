@@ -90,7 +90,36 @@ else
                     <td>
                         <a asp-action="Details" asp-route-id="@application.Id" class="btn btn-sm btn-outline-secondary">Details</a>
                         <a asp-action="Edit" asp-route-id="@application.Id" class="btn btn-sm btn-outline-primary ms-2">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@application.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger ms-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal-@application.Id">
+                            Delete
+                        </button>
+
+                        <div class="modal fade" id="deleteModal-@application.Id" tabindex="-1"
+                             aria-labelledby="deleteModalLabel-@application.Id" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel-@application.Id">Confirm delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete:
+                                        <strong>@application.CompanyName</strong> — <strong>@application.JobTitle</strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form asp-action="Delete" asp-route-id="@application.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
