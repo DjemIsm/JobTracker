@@ -3,6 +3,7 @@ using JobTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace JobTracker.Controllers
 {
@@ -131,6 +132,44 @@ namespace JobTracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+        [HttpGet]
+        public async Task<IActionResult> ExportCsv()
+        {
+            var apps = await _context.JobApplications
+                .OrderByDescending(x => x.ApplicationDate)
+                .ThenByDescending(x => x.Id)
+                .ToListAsync();
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine("Id,CompanyName,JobTitle,ApplicationDate,Status,Notes");
+
+            foreach (var app in apps)
+            {
+                var line = string.Join(",",
+                    EscapeCsv(app.Id.ToString()),
+                    EscapeCsv(app.CompanyName),
+                    EscapeCsv(app.JobTitle),
+                    EscapeCsv(app.ApplicationDate.ToString("yyyy-MM-dd")),
+                    EscapeCsv(app.Status.ToString()),
+                    EscapeCsv(app.Notes ?? "")
+                    );
+                sb.AppendLine(line);
+            }
+
+            var utf8WithBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
+            var bytes = utf8WithBom.GetBytes(sb.ToString());
+
+            return File(bytes, "text/csv", "JobApplications.csv");
+        }
+
+        private static string EscapeCsv(string v)
+        {
+            if (v.IndexOfAny([',', '"', '\r', '\n']) >= 0)
+            {
+                return $"\"{v.Replace("\"", "\"\"")}\"";
+            }
+            return v;
+        }
     }
 }
