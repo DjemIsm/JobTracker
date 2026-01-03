@@ -1,0 +1,17 @@
+﻿@model JobTracker.Models.ApplicationStatus
+
+@{
+    // Bootstrap badge classes
+    var badgeClass = Model switch
+    {
+        JobTracker.Models.ApplicationStatus.Applied => "bg-secondary",
+        JobTracker.Models.ApplicationStatus.Interview => "bg-info text-dark",
+        JobTracker.Models.ApplicationStatus.Offer => "bg-success",
+        JobTracker.Models.ApplicationStatus.Rejected => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    var text = Model.ToString();
+}
+
+<span class="badge @badgeClass">@text</span>

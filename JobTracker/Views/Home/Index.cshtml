@@ -52,7 +52,9 @@ else
                 <tr>
                     <td>@application.CompanyName</td>
                     <td>@application.JobTitle</td>
-                    <td>@application.Status</td>
+                    <td>
+                        <partial name="_StatusBadge" model="application.Status" />
+                    </td>
                     <td>@application.ApplicationDate.ToString("yyyy-MM-dd")</td>
                     <td class="text-end">
                         <a asp-controller="JobApplications" asp-action="Details" asp-route-id="@application.Id"

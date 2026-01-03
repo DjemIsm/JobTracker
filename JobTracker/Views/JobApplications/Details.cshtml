@@ -16,7 +16,9 @@
     <dd class="col-sm-9">@Model.ApplicationDate.ToShortDateString()</dd>
 
     <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Status)</dt>
-    <dd class="col-sm-9">@Model.Status.ToString()</dd>
+    <dd class="col-sm-9">
+        <partial name="_StatusBadge" model="Model.Status" />
+    </dd>
 
     <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Notes)</dt>
     <dd class="col-sm-9">@Model.Notes</dd>

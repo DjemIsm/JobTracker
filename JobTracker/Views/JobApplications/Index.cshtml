@@ -83,7 +83,9 @@ else
                     <td>@application.CompanyName</td>
                     <td>@application.JobTitle</td>
                     <td>@application.ApplicationDate.ToShortDateString()</td>
-                    <td>@application.Status.ToString()</td>
+                    <td>
+                        <partial name="_StatusBadge" model="application.Status" />
+                     </td>
                     <td>@application.Notes</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@application.Id" class="btn btn-sm btn-outline-secondary">Details</a>

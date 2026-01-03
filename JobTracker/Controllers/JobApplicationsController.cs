@@ -58,8 +58,10 @@ namespace JobTracker.Controllers
             {
                 _context.Add(jobApplication);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Job application created successfully.";
                 return RedirectToAction(nameof(Index));
             }
+
             return View(jobApplication);
         }
 
@@ -106,6 +108,9 @@ namespace JobTracker.Controllers
             }
             _context.Update(jobApplication);
             await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Job application updated successfully.";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -117,6 +122,7 @@ namespace JobTracker.Controllers
 
             if (jobApplication == null)
                 return NotFound();
+
             return View(jobApplication);
         }
 
@@ -129,6 +135,7 @@ namespace JobTracker.Controllers
                 return NotFound();
             _context.JobApplications.Remove(jobApplication);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Job application deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
