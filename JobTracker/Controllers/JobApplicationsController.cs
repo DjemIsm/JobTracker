@@ -21,18 +21,7 @@ namespace JobTracker.Controllers
         {
             IQueryable<JobApplication> query = _context.JobApplications;
 
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                var term = q.Trim();
-                query = query.Where(x =>
-                    x.CompanyName.Contains(term) ||
-                    x.JobTitle.Contains(term));
-            }
-
-            if (status.HasValue)
-            {
-                query = query.Where(x => x.Status == status.Value);
-            }
+            query = ApplyFilter(query, q, status);
 
             var jobApplications = await query
                 .OrderByDescending(x => x.ApplicationDate)
@@ -114,18 +103,6 @@ namespace JobTracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //        return NotFound();
-        //    var jobApplication = await _context.JobApplications.FindAsync(id);
-
-        //    if (jobApplication == null)
-        //        return NotFound();
-
-        //    return View(jobApplication);
-        //}
-
         [HttpPost, ActionName("Delete") ]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -144,18 +121,7 @@ namespace JobTracker.Controllers
         {
             IQueryable<JobApplication> query = _context.JobApplications;
 
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                var term = q.Trim();
-                query = query.Where(x =>
-                    x.CompanyName.Contains(term) ||
-                    x.JobTitle.Contains(term));
-            }
-
-            if (status.HasValue)
-            {
-                query = query.Where(x => x.Status == status.Value);
-            }
+            query = ApplyFilter(query, q, status);
 
             var apps = await query
                 .OrderByDescending(x => x.ApplicationDate)
@@ -192,6 +158,23 @@ namespace JobTracker.Controllers
                 return $"\"{v.Replace("\"", "\"\"")}\"";
             }
             return v;
+        }
+
+        private static IQueryable<JobApplication> ApplyFilter(
+            IQueryable<JobApplication> query, string? q, ApplicationStatus? status)
+        {
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var term = q.Trim();
+                query = query.Where(x =>
+                    x.CompanyName.Contains(term) ||
+                    x.JobTitle.Contains(term));
+            }
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status.Value);
+            }
+            return query;
         }
     }
 }
