@@ -23,3 +23,13 @@ A personal web application to track job applications.
 - Responsive UI
 
 ## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Job Applications
+![Job Applications](screenshots/job-list.png)
+
+### Edit Job Application
+![Edit Job Application](screenshots/edit-form.png)
+
