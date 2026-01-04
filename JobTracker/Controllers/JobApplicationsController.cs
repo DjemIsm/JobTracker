@@ -114,17 +114,17 @@ namespace JobTracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-                return NotFound();
-            var jobApplication = await _context.JobApplications.FindAsync(id);
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //        return NotFound();
+        //    var jobApplication = await _context.JobApplications.FindAsync(id);
 
-            if (jobApplication == null)
-                return NotFound();
+        //    if (jobApplication == null)
+        //        return NotFound();
 
-            return View(jobApplication);
-        }
+        //    return View(jobApplication);
+        //}
 
         [HttpPost, ActionName("Delete") ]
         [ValidateAntiForgeryToken]
